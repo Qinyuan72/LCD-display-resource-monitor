@@ -8,7 +8,7 @@ logfile = "jp2091"
 def socket_start():
     global sock
     sock = socket.socket()
-    host = "192.168.1.6"
+    host = "192.168.31.134"
     port = 8080
     sock.connect((host, port))
     print("Connected . . .")
@@ -84,9 +84,9 @@ def main():
         byte_add_kb = (((bytes_received() - old_bytes_received)*(1/sleeptime))/800)*3
         int_byte_add_kb = int(byte_add_kb)
         if VPN_connection_checker() == True:
-            socket_send(LCD_str_inputmaker("CPU:{:.0f}% RAM:{:.0f}%  &{}:{}Kbps".format(cpu_usage, psutil.virtual_memory().percent,logfile.upper() ,int_byte_add_kb)))
+            socket_send(LCD_str_inputmaker("CPU:{:.0f}% RAM:{:.0f}%  &{}:{}Kbps".format(cpu_usage, psutil.virtual_memory().percent,logfile.upper(), str(int_byte_add_kb)+'Kbps' if int_byte_add_kb < 1000 else str(int_byte_add_kb/1000)[0:4]+'Mbps')))
         else:
-            socket_send(LCD_str_inputmaker("CPU:{:.0f}% RAM:{:.0f}%  &Network:{}Kbps".format(cpu_usage,psutil.virtual_memory().percent,int_byte_add_kb)))
+            socket_send(LCD_str_inputmaker("CPU:{:.0f}% RAM:{:.0f}%  &Network:{}Kbps".format(cpu_usage,psutil.virtual_memory().percent, str(int_byte_add_kb)+'Kbps' if int_byte_add_kb < 1000 else str(int_byte_add_kb/1000)[0:4]+'Mbps')))
         old_bytes_received = bytes_received()
         sleep(sleeptime)
 
